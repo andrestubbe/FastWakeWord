@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.github.andrestubbe</groupId>
+  <artifactId>fastwakeword</artifactId>
+  <version>0.1.0</version>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <arg0>--help</arg0>
+    <arg1>--help</arg1>
+  </properties>
+
+  <dependencies>
+    <!-- Local FastAudioProcess -->
+    <dependency>
+      <groupId>com.github.andrestubbe</groupId>
+      <artifactId>FastAudioProcess</artifactId>
+      <version>0.1.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/../FastAudioProcess/target/FastAudioProcess-0.1.0.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.github.andrestubbe</groupId>
+      <artifactId>FastTheme</artifactId>
+      <version>0.1.1</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <compilerArgs>
+            <arg>--add-modules</arg>
+            <arg>jdk.incubator.vector</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <executable>java</executable>
+          <classpathScope>compile</classpathScope>
+          <arguments>
+            <argument>--add-modules</argument>
+            <argument>jdk.incubator.vector</argument>
+            <argument>-classpath</argument>
+            <classpath/>
+            <argument>fastwakeword.BotDetectorGUI</argument>
+            <argument>${arg0}</argument>
+            <argument>${arg1}</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
