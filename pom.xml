@@ -16,14 +16,19 @@
     <arg1>--help</arg1>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
+
   <dependencies>
-    <!-- Local FastAudioProcess -->
+    <!-- FastAudioProcess via JitPack -->
     <dependency>
       <groupId>com.github.andrestubbe</groupId>
       <artifactId>FastAudioProcess</artifactId>
-      <version>0.1.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/../FastAudioProcess/target/FastAudioProcess-0.1.0.jar</systemPath>
+      <version>0.1.1</version>
     </dependency>
     <dependency>
       <groupId>com.github.andrestubbe</groupId>
