@@ -149,7 +149,7 @@ public final class BotDetectorDemo {
         }
     }
 
-    private static void recordTemplate() {
+    private static void recordTemplate(String filename) {
         try {
             AudioFormat format = new AudioFormat(16000.0f, 16, 1, true, false);
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
@@ -181,10 +181,10 @@ public final class BotDetectorDemo {
             line.stop();
             line.close();
 
-            System.out.println("Recording complete. Saving to 'template_bot.wav'...");
+            System.out.println("Recording complete. Saving to '" + filename + "'...");
             java.io.ByteArrayInputStream bais = new java.io.ByteArrayInputStream(data);
             AudioInputStream ais = new AudioInputStream(bais, format, data.length / 2);
-            File outputFile = new File("template_bot.wav");
+            File outputFile = new File(filename);
             AudioSystem.write(ais, AudioFileFormat.Type.WAVE, outputFile);
             System.out.println("Saved template to: " + outputFile.getAbsolutePath());
             System.out.println("Now you can run the test detection.");
