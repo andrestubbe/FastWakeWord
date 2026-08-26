@@ -26,5 +26,5 @@ if %ERRORLEVEL% NEQ 0 (
 echo ===================================================
 echo  Running JMH Benchmarks (Throughput: ops/ms)
 echo ===================================================
-java --enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow "-Djava.library.path=..\..\native;native" -jar target\benchmarks.jar -f 1 -wi 2 -i 3 -tu ms -bm thrpt
+java --add-modules jdk.incubator.vector --enable-native-access=ALL-UNNAMED "-Djava.library.path=..\..\native;native" -jar target\benchmarks.jar -f 1 -wi 2 -i 3 -tu ms -bm thrpt
 pause
