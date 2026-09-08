@@ -12,7 +12,7 @@
 
 **FastWakeWord** provides real-time voice trigger detection with minimal CPU overhead. Built for AI agents and hands-free automation tools that require instant response to wake-word activation.
 
----
+Watch Demo (YouTube) | Watch JMH Benchmark (YouTube)
 
 [![FastKeyboard Showcase](docs/screenshot.png)](https://www.youtube.com/watch?v=BZsqQl7WqWk)
 
