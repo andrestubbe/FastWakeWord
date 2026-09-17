@@ -32,21 +32,21 @@ Watch Demo (YouTube) | Watch JMH Benchmark (YouTube)
 
 Continuous, hands-free voice trigger detection ("Hey Assistant", "Computer", "Bot") is notoriously difficult in Java applications:
 
-* **Resource-Heavy Inference Engines:** Running full neural frameworks (like ONNX Runtime or TensorFlow Lite) 24/7 just to detect a single trigger word consumes 100–300 MB of RAM and constantly burdens laptop batteries.
-* **CPU Churn in Silent Environments:** Naive audio polling processes every microphone frame equally, executing expensive FFT and acoustic scoring algorithms even when the room is completely silent.
-* **Proprietary Vendor Lock-in:** Solutions like Picovoice Porcupine require online license activations, commercial contracts, and closed-source binaries.
-* **Garbage Collection Jitter:** Streaming live 16 kHz audio streams through high-level Java buffers triggers GC pauses that cause missed voice trigger events.
+1. **Resource-Heavy Inference Engines**: Running full neural frameworks (like ONNX Runtime or TensorFlow Lite) 24/7 just to detect a single trigger word consumes 100–300 MB of RAM and constantly burdens laptop batteries.
+2. **CPU Churn in Silent Environments**: Naive audio polling processes every microphone frame equally, executing expensive FFT and acoustic scoring algorithms even when the room is completely silent.
+3. **Proprietary Vendor Lock-in**: Solutions like Picovoice Porcupine require online license activations, commercial contracts, and closed-source binaries.
+4. **Garbage Collection Jitter**: Streaming live 16 kHz audio streams through high-level Java buffers triggers GC pauses that cause missed voice trigger events.
 
-FastWakeWord provides an ultra-lightweight, offline template-matching engine powered by native SIMD Log-Mel spectrograms (`FastAudioProcess`). It includes energy-based Voice Activity Detection (VAD) gating, dropping CPU consumption to near zero during quiet periods.
+FastWakeWord provides an ultra-lightweight, offline template-matching engine powered by native SIMD Log-Mel spectrograms (`FastAudioProcess`). It includes energy-based Voice Activity Detection (VAD) gating, dropping CPU consumption to near zero during quiet periods:
 
-| Feature | Porcupine (Picovoice) | OpenWakeWord (ONNX) | CMU Sphinx / Vosk | FastWakeWord |
-| :--- | :--- | :--- | :--- | :--- |
-| **Detection Method** | Proprietary Neural Net | Heavy DNN / ONNX Model | Acoustic HMM Model | **SIMD Log-Mel Template Matching** |
-| **Idle CPU (Silence)** | 1–3% continuous | 3–8% continuous | 5–12% continuous | **< 0.1% (VAD Energy Pre-gate)** |
-| **RAM Footprint** | ~20–40 MB | 80–250 MB (ONNX Runtime) | 150–300 MB | **< 10 MB (Pure In-Memory)** |
-| **Frame Processing Latency** | ~5–12 ms | ~15–30 ms | ~40–80 ms | **< 0.5 ms per 10 ms frame** |
-| **Licensing / Privacy** | Commercial Key / Tracking | Open Source (Apache 2.0) | Open Source (BSD/Apache) | **100% MIT / Offline Local** |
-| **Dependencies** | Proprietary C library | Heavy ONNX Runtime JARs | Bulky native libraries | **Lightweight FastJava Core** |
+| Feature | Porcupine (Picovoice) | OpenWakeWord (ONNX) | FastWakeWord |
+|:---|:---|:---|:---|
+| **Detection Engine** | Proprietary Neural Net | Heavy DNN / ONNX Model | **SIMD Log-Mel Template Matching** |
+| **Idle CPU (Silence)** | 1–3% continuous | 3–8% continuous | **< 0.1% (VAD Energy Pre-gate)** |
+| **RAM Footprint** | ~20–40 MB | 80–250 MB (ONNX Runtime) | **< 10 MB (Pure In-Memory)** |
+| **Frame Latency** | ~5–12 ms | ~15–30 ms | **< 0.5 ms per 10 ms frame** |
+| **Licensing / Privacy** | Commercial Key / Tracking | Open Source (Apache 2.0) | **100% MIT / Offline Local** |
+| **Dependencies** | Proprietary C library | Heavy ONNX Runtime JARs | **Lightweight FastJava Core** |
 
 ---
 
