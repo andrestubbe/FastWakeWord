@@ -22,24 +22,46 @@ Watch Demo (YouTube) | Watch JMH Benchmark (YouTube)
 
 ```java
 import fastwakeword.FastWakeWordEngine;
+import fastaudioprocess.FastAudioProcess;
+import java.io.File;
+import javax.sound.sampled.*;
 
 public class Demo {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         int sampleRate = 16000;
         int frameSize = 160;   // 10 ms at 16 kHz
         int melBands = 40;
         int windowFrames = 30; // 300 ms sliding window
         float threshold = 0.75f;
 
+        // 1. Initialize Ultra-Fast Wake-Word Engine
         FastWakeWordEngine engine = new FastWakeWordEngine(
             sampleRate, frameSize, melBands, windowFrames, threshold
         );
 
-        engine.setOnTrigger(() -> {
-            System.out.println("⚡ Wake-word 'bot' detected!");
+        // 2. Load Reference Wake-Word Template ("bot")
+        File templateFile = new File("template_bot.wav");
+        try (AudioInputStream ais = AudioSystem.getAudioInputStream(templateFile)) {
+            byte[] bytes = ais.readAllBytes();
+            float[] samples = new float[bytes.length / 2];
+            for (int i = 0; i < samples.length; i++) {
+                short s = (short) ((bytes[i * 2] & 0xFF) | (bytes[i * 2 + 1] << 8));
+                samples[i] = s / 32768.0f;
+            }
+            float[][] templateLogMel = FastAudioProcess.logMelSpectrogram(
+                samples, sampleRate, frameSize, frameSize, melBands
+            );
+            int startFrame = Math.max(0, (templateLogMel.length - windowFrames) / 2);
+            engine.setTemplate(engine.extractTemplate(templateLogMel, startFrame, windowFrames));
+        }
+
+        // 3. Register Trigger & Confidence Callbacks
+        engine.setOnTrigger(() -> System.out.println("⚡ Wake-word 'bot' detected!"));
+        engine.setOnScore(score -> {
+            if (score > 0.5f) System.out.printf("Match confidence: %.2f%n", score);
         });
 
-        // Feed real-time 160-sample PCM frames (e.g. from FastAudioCapture)
+        // 4. Feed live 10 ms PCM frames (e.g. from FastAudioCapture or microphone)
         short[] pcmFrame = new short[160];
         engine.processFrame(pcmFrame);
     }
